@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; padding: 20px; }
+        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+        h1 { color: #007BFF; }
+        .weather-info { margin: 20px 0; font-size: 18px; }
+        .best-months { background: #e8f5e9; padding: 10px; border-radius: 5px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🌤️ Weather Forecast for Farming</h1>
+        <p>Get the latest weather updates and best farming months.</p>
+
+        <div class="weather-info">
+            <p>🌡️ Temperature: <span id="temperature">--</span>°C</p>
+            <p>🌧️ Rainfall Chance: <span id="rain">--</span>%</p>
+            <p>🌤️ Condition: <span id="condition">--</span></p>
+        </div>
+
+        <div class="best-months">
+            <h3>📅 Best Months for Farming</h3>
+            <p id="bestMonths">Loading...</p>
+            <button class="back-btn" onclick="goHome()">🏠 Back to Home</button>
+        </div>
+    </div>
+
+    <script>
+        async function getWeather() {
+            const apiKey = "4c5d825c3e48149490e098eb5b4e05d4"; // Replace with your actual API key
+            const city = "Tumkur"; // Replace with your preferred location
+            const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=1`;
+
+            try {
+                let response = await fetch(url);
+                let data = await response.json();
+                
+                document.getElementById("temperature").innerText = data.current.temp_c;
+                document.getElementById("rain").innerText = data.forecast.forecastday[0].day.daily_chance_of_rain;
+                document.getElementById("condition").innerText = data.current.condition.text;
+
+                suggestBestMonths(data.current.temp_c, data.forecast.forecastday[0].day.daily_chance_of_rain);
+            } catch (error) {
+                console.error("Error fetching weather data:", error);
+                document.getElementById("bestMonths").innerText = "Error loading data.";
+            }
+        }
+
+        function suggestBestMonths(temp, rain) {
+            let bestMonths;
+            if (temp > 25 && rain < 30) {
+                bestMonths = "🌾 March - June (Ideal for Wheat & Rice)";
+            } else if (temp < 20) {
+                bestMonths = "🌱 November - February (Best for Vegetables & Pulses)";
+            } else {
+                bestMonths = "🌿 September - October (Good for Post-Monsoon Crops)";
+            }
+            document.getElementById("bestMonths").innerText = bestMonths;
+        }
+        function goHome() {
+            window.location.href = "/login/indexx.php";
+        }
+
+        getWeather();
+    </script>
+
+</body>
+</html>
