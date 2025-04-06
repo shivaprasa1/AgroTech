@@ -31,7 +31,7 @@ agriculture-website/
 │   └── /js
 │       └── script.js           # JS logic and events
 │
-└── README.md                   # This file
+└── README.md                   # This file 
 
 
 ---
